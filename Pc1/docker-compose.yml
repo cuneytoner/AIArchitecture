@@ -1,0 +1,48 @@
+services:
+  comfyui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai_image_comfyui
+    ports:
+      - "8188:8188"
+    volumes:
+      - ./comfyui_data/models:/workspace/models
+      - ./comfyui_data/input:/workspace/input
+      - ./comfyui_data/output:/workspace/output
+      - ./shared_3d_data:/workspace/shared_3d_data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: always
+
+  blender_api:
+    image: linuxserver/blender:version-3.6.4
+    container_name: ai_3d_blender
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+    volumes:
+      # Sadece klasörü bağlıyoruz, script zaten bu klasörün içinde duracak
+      - ./shared_3d_data:/3d_workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    ports:
+      - "3001:3000"
+    restart: always
+  redis:
+    image: redis:7-alpine
+    container_name: ai_queue_redis
+    ports:
+      - "6379:6379"
+    restart: always

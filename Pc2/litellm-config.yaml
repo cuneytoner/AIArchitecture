@@ -1,0 +1,18 @@
+model_list:
+  - model_name: akilli-kod-asistani
+    litellm_params:
+      model: ollama/qwen2.5-coder:14b
+      api_base: http://192.168.50.1:11434
+      tpm: 100000
+      rpm: 1000
+
+  - model_name: planlama-ve-bellek
+    litellm_params:
+      model: ollama/llama3.3:70b-instruct-q2_K
+      api_base: http://localhost:11434
+      tpm: 100000
+      rpm: 1000
+
+litellm_settings:
+  drop_invalid_params: true
+  set_verbose: false

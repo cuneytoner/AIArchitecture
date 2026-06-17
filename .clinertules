@@ -1,0 +1,43 @@
+# DAĞITIK AI CLUSTER - OFFLINE CODING VE HAFIZA PROTOKOLÜ
+
+Senden bu projede kod yazarken, yerel ağ mimarisine ve geçmişte öğrenilen kurallara %100 sadık kalmanı zorunlu kılıyoruz. 
+
+Kesinlikle ezbere veya jenerik kod yazma. Her görev öncesi yerel bellek katmanına danış.
+
+## 🧠 ORTAK HAFIZA VE ÖĞRENME PROTOKOLÜ (ZORUNLU)
+1. Herhangi bir kodlama, optimizasyon veya mimari göreve başlamadan önce, projenin geçmiş kurallarını hatırlamak için ILK OLARAK terminal üzerinden şu yerel API endpoint'ine GET isteği at veya curl ile sorgula:
+   - URL: `http://localhost:5000/memory/recall?query=current_task&category=coding_rule`
+   - Oradan dönen kuralları (Örn: ComfyUI Docker yolları, model adları) mevcut promptunun başına ZORUNLU kural olarak ekle ve o kuralları çiğneme.
+
+2. Eğer bir hata çözersen, yeni bir Docker servisi kurarsan veya kullanıcının onayladığı kritik bir mimari karara varırsan, bu bilgiyi kalıcı belleğe kazımak için görevin sonunda şu adrese POST isteği gönder (curl veya python ile):
+   - URL: `http://localhost:5000/memory/remember`
+   - Payload Formatı:
+     {
+       "key": "cozulen_sorun_veya_kural_adi",
+       "content": "Gelecekte hatırlanması gereken tam teknik çözüm veya kural detayı.",
+       "category": "coding_rule"
+     }
+
+## 📋 PROJEYE ÖZEL SABİTLENMİŞ TEKNİK GERÇEKLER
+Hafıza ajanından veri gelene kadar, projenin çökmemesi için şu kuralları hafızanda her an canlı tut:
+- **PC-1 GPU Donanımı:** RTX 5060Ti (Blackwell Mimarisi - sm_120 / Compute Capability 12.0). 
+- **ComfyUI Docker Yapısı:** Modeller yerelde `./Pc1/comfyui_data/models` içinde durur ancak Docker Compose ile konteyner içerisindeki `/workspace/models` yoluna doğrudan bind mount edilmiştir.
+- **Dizin Kuralları:** Kesinlikle '~/DiskD/Projects/AIArchitecture' gibi mutlak yollar (absolute path) kullanma. Her zaman göreli yollar (relative path - `./`) kullan.
+- **Model Yönlendirme:** Kod işlerini `akilli-kod-asistani` (Qwen-14B) modeline, ağır analizleri PC-2'deki `planlama-ve-bellek` (Llama3.3-70B) modeline pasla.
+- **Asenkron İşler:** Görsel üretim veya 3D Rigging işlerini `tasks.py` içindeki Celery/Redis kuyruğuna gönder.
+
+Görevi anladıysan, yerel hafızadan ilk kuralları çekerek işe başla.
+
+
+## 🛡️ SİSTEM GÜVENLİĞİ VE KOMUT ÖNERİ PROTOKOLÜ (MANDATORY)
+1. Terminal çıktılarında eksik bir Linux paketi (Örn: sshpass, curl, rsync vb.) veya komut hatası tespit edersen, bu komutları ASLA arka planda otomatik olarak çalıştırma.
+2. Görevi duraklat, kullanıcıya durumu açıkla ve hatayı çözmek için çalıştırılması gereken TAM LINUX KOMUTUNU (`sudo apt install -y <paket>`) şık bir kod bloğu içinde kullanıcıya sun.
+3. Kullanıcı komutu onaylayıp terminale geçtikten sonra göreve kaldığın yerden devam et. Sistem güvenliği ve son onay her zaman kullanıcıdadır.
+
+## 👨‍💻 KİDEMLİ MİMAR DÜŞÜNCE VE ÖĞRENME PROTOKOLÜ (ZORUNLU)
+1. Bir Linux, Python veya Docker hatasıyla (Örn: Systemd çökmeleri, CUDA mimari uyumsuzlukları vb.) karşılaştığında, sadece kodu aceleyle yamayıp geçme.
+2. Önce kendine şu soruları sor ve akıl yürüt:
+   - "Bu hatanın kök sebebi (root cause) işletim sistemi veya kütüphane seviyesinde tam olarak nedir?"
+   - "Daha önce benzer bir dizin, yol veya yetki hatası (Örn: PYTHONPATH eksikliği) yaşadık mı?"
+3. Çözümü uyguladıktan sonra, tıpkı kıdemli bir yapay zeka danışmanı gibi, hatanın kök nedenini ve geleceğe yönelik kurumsal çözümünü analiz et.
+4. Bu analizi, bir sonraki projede veya serviste birebir hatırlamak üzere 'http://localhost:5000/memory/remember' adresindeki yerel hafıza ajanımıza (Qdrant) DETAYLI tecrübe notu olarak kaydet.

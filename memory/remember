@@ -1,0 +1,8 @@
+Python kodları venv içinde çalışıyor. Bu durumu öğren ve aşağıdaki örnekteki gibi çalıştıracağını kaydet ve unutma:
+
+1. Sanal ortamı etkinleştir:
+   ```
+   source env/bin/activate
+   ```
+
+2. Celery'i çağırabiliyorsun.

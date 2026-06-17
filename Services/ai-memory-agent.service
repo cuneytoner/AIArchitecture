@@ -1,0 +1,12 @@
+[Unit]
+Description=AI Memory Agent Service
+After=network.target
+
+[Service]
+ExecStart=/home/cuneyt/DiskD/Projects/AIArchitecture/env/bin/python /home/cuneyt/DiskD/Projects/AIArchitecture/memory_agent.py
+Restart=always
+User=cuneyt
+Group=cuneyt
+
+[Install]
+WantedBy=multi-user.target

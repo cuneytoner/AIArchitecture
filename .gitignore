@@ -1,0 +1,21 @@
+# Python Bağımlılıkları ve Sanal Ortam
+env/
+.venv/
+__pycache__/
+*.pyc
+
+# Klasör derinliği fark etmeksizin Büyük Yapay Zeka Verilerini Engelle
+**/comfyui_data/
+**/qdrant_data/
+**/postgres_data/
+**/openwebui_data/
+**/shared_3d_data/
+
+# IDE ve Geçici Dosyalar
+.vscode/
+.idea/
+.DS_Store
+*.log
+*.tmp
+.env
+cluster_backups/
