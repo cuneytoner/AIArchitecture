@@ -84,4 +84,3 @@ Genişletme: Yeni makine geldiğinde sadece cluster_config.env dosyasındaki IP 
 Cline eklentisi projede her başarılı git commit veya clusterctl.sh deploy işlemi yaptıktan sonra, bu dokümanı açıp en güncel port ve imaj bilgilerini revize etmekle yükümlüdür.
 Güncellenen her mimari adım, memory_agent.py üzerinden PC-2 Qdrant veritabanına category: architectural_decision etiketiyle post edilir.
 PC-2'deki Open-WebUI (Llama-70B) üzerinden bir döküman analizi sorgusu yaptığınızda, Llama-70B modeli Qdrant veritabanına başvurarak bu dökümandaki güncel port haritasını okur.
-Kayıt işlemi bittiğinde, bu yeni dokümantasyon dosyasını Git takibine ekle (git add CLUSTER_ARCHITECTURE.md), docs: add comprehensive distributed cluster architecture manual mesajıyla commit at ve git push origin main ile GitHub repomuza fırlat.

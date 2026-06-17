@@ -1,15 +1,17 @@
 [Unit]
 Description=AI Celery Worker Service
-After=network.target
+# [KRİTİK BAĞIMLILIK]: Docker motoru ve ağ katmanları tamamen ayağa kalkmadan bu servisi asla başlatma
+After=network.target docker.service
+Requires=docker.service
 
 [Service]
 User=cuneyt
 Group=cuneyt
-WorkingDirectory=/home/cuneyt/DiskD/Projects/AIArchitecture/
-Environment="PATH=/home/cuneyt/DiskD/Projects/AIArchitecture/env/bin" "PYTHONPATH=/home/cuneyt/DiskD/Projects/AIArchitecture" "CELERY_BROKER_URL=redis://ai_queue_redis:6379/0"
-ExecStartPre=-/bin/bash -c 'source /home/cuneyt/DiskD/Projects/AIArchitecture/env/bin/activate && echo "Virtual environment activated"'
+WorkingDirectory=/home/cuneyt/DiskD/Projects/AIArchitecture
+Environment="PATH=/home/cuneyt/DiskD/Projects/AIArchitecture/env/bin" "PYTHONPATH=/home/cuneyt/DiskD/Projects/AIArchitecture"
 ExecStart=/home/cuneyt/DiskD/Projects/AIArchitecture/env/bin/python -m celery -A tasks worker --loglevel=info
 Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
