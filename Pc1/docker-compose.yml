@@ -4,11 +4,15 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: ai_image_comfyui
-
     user: "1000:1000"
-    
     ports:
       - "8188:8188"
+    environment:
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128,expandable_segments:True
+      - CUDA_LAUNCH_BLOCKING=1
+      # [KESİN ÇÖZÜM]: Triton ve PyTorch'a izin hatası veren root dizini yerine tam yetkili çalışma dizinini hedefletiyoruz
+      - TRITON_CACHE_DIR=/workspace/.triton
+      - HOME=/workspace
     volumes:
       - ./comfyui_data/models:/workspace/models
       - ./comfyui_data/input:/workspace/input
