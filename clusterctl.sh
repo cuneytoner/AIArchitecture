@@ -47,8 +47,9 @@ deploy() {
 
 
     echo "Activating Docker containers on PC-2..."
+    echo "cd $PROJECT_ROOT_PATH/Pc2/ && docker compose down 2>/dev/null && docker compose up -d"
     # 3. Uzak makinede doğrudan hedef klasöre girip modern docker compose komutunu tetikliyoruz
-    sshpass -p 'your_password_here' ssh cuneyt@$NODE_MEMORY_RAM_IP "cd $PROJECT_ROOT_PATH/Pc2/ && docker compose down 2>/dev/null && docker compose up -d"
+    sshpass -p 'cc' ssh cuneyt@$NODE_MEMORY_RAM_IP "cd $PROJECT_ROOT_PATH/Pc2/ && docker compose down 2>/dev/null && docker compose up -d"
 }
 
 # Up: Start local services on PC-1 and PC-2, and Systemd services on PC-1
