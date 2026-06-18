@@ -1,49 +1,24 @@
+version: '3.8'
+
 services:
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: ai_memory_portainer
-    ports:
-      - "9000:9000"
-      - "8000:8000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./portainer_data:/data
-    restart: always
-
-  celery-flower:
-    image: mher/flower:latest
-    container_name: ai_memory_celery_flower
-    environment:
-      CELERY_BROKER_URL: "redis://192.168.50.1:6379/0"
-    ports:
-      - "5555:5555"
-    restart: always
-
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: ai_router_litellm
+    # [PORT ÇÖZÜMÜ]: 8000 portunu tamamen Portainer tüneline bıraktık. LiteLLM dışarıya 8001'den hizmet verecek.
     ports:
       - "8001:8000"
     volumes:
       - ./litellm-config.yaml:/app/config.yaml
-    restart: always
     command: [ "--config", "/app/config.yaml", "--port", "8000" ]
-
-  qdrant:
-    image: qdrant/qdrant:latest
-    container_name: ai_memory_qdrant
-    ports:
-      - "6333:6333"
-    volumes:
-      - ./qdrant_data:/qdrant/storage
     restart: always
 
-  postgres:
+postgres:
+    # [DÜZELTME]: Veri kaybını ve sürüm çakışmasını önlemek için v16-alpine standardına geri dönüyoruz
     image: postgres:16-alpine
     container_name: ai_db_postgres
     environment:
-      POSTGRES_USER: ai_admin
-      POSTGRES_PASSWORD: ai_secure_password
+      POSTGRES_USER: cuneyt
+      POSTGRES_PASSWORD: local-cluster-db-pass
       POSTGRES_DB: ai_knowledge_base
     ports:
       - "5432:5432"
@@ -51,18 +26,28 @@ services:
       - ./postgres_data:/var/lib/postgresql/data
     restart: always
 
-  open-webui:
+qdrant:
+    image: qdrant/qdrant:latest
+    container_name: ai_memory_qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant_data:/qdrant/storage
+    restart: always
+
+open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: ai_chat_interface
     ports:
       - "3000:8080"
     environment:
+      # [İÇ AĞ BAĞI]: Konteynerler kendi içinde 8000 portuyla konuşmaya devam edebilir
       - OPENAI_API_BASE_URL=http://litellm:8000/v1
       - OPENAI_API_KEY=local-cluster-key
       - WEBUI_SECRET_KEY=super_secure_offline_secret
       - ENABLE_OLLAMA_API=False
       - ENABLE_OPENAI_API=True
-      # [KESİN BAĞLANTI]: Open-WebUI doğrudan bizim LiteLLM üzerindeki görsel rotamıza kilitleniyor
       - ENABLE_IMAGE_GENERATION=True
       - IMAGE_GENERATION_ENGINE=openai
       - IMAGE_GENERATION_MODEL=cluster-image-engine
@@ -71,4 +56,25 @@ services:
       - ./openwebui_data:/app/backend/data
     depends_on:
       - litellm
+    restart: always
+
+portainer:
+    image: portainer/portainer-ce:latest
+    container_name: ai_memory_portainer
+    ports:
+      - "9000:9000"
+      # [TÜNEL KAPISI]: PC-1'den gelecek Edge Tünel bağlantılarını doğrudan ve sadece Portainer karşılayacak
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer_data:/data
+    restart: always
+
+celery-flower:
+    image: mher/flower:latest
+    container_name: ai_memory_celery_flower
+    environment:
+      - CELERY_BROKER_URL=redis://192.168.50.1:6379/0
+    ports:
+      - "5555:5555"
     restart: always
