@@ -39,6 +39,10 @@ Sistemdeki tüm servisler izole Docker konteynerleri ve Linux systemd arka plan 
 - ai_memory_celery_flower | Docker Container | Port 5555 | PC-1'deki Redis'e bağlanarak asenkron imaj ve 3D rig işlerini grafiksel izleyen panel.
 - Ollama (Orchestrator) | Linux Native | Port 11434 | llama3.3:70B mimari planlama modelini 32GB RAM üzerinde çalıştırır.
 
+## Cluster Models Installed:
+- qwen2.5-coder:14b
+- deepseek-coder:6.7b
+
 3. Sıfırdan Adım Adım Kurulum Kılavuzu (Bootstrap Guide)
 Sistem tamamen çöktüğünde veya yeni bir bilgisayara geçildiğinde sıfırdan ayağa kaldırma prosedürü:
 
@@ -71,7 +75,7 @@ Adım 5: Sistem Servislerinin Linux'a Tanıtılması
 sudo chmod +x ./Services/install_services.sh
 sudo ./Services/install_services.sh
 
-Adım 6: Global CLI Yönetim Aracı ile Cluster'ı Ayağa Kaldırmak
+Adım 6: Global CLI Yönetim Aracı ile Cluster'ı Ayağa Kaldırak
 chmod +x ./clusterctl.sh
 ./clusterctl.sh deploy
 

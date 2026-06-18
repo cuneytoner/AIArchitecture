@@ -1,4 +1,5 @@
 model_list:
+  # 🤖 AJAN 1: Ana Kod Yazarı ve Refaktör İşçisi (PC-1)
   - model_name: akilli-kod-asistani
     litellm_params:
       model: ollama/qwen2.5-coder:14b
@@ -6,12 +7,19 @@ model_list:
       tpm: 100000
       rpm: 1000
 
+  # 🧠 AJAN 2: Ağır Mimari Planlama ve Algoritma Tasarımcısı (PC-2)
   - model_name: planlama-ve-bellek
     litellm_params:
       model: ollama/llama3.3:70b
       api_base: http://localhost:11434
 
-  # [KRİTİK EKLEME]: LiteLLM'e OpenAI standartlarında bir görsel üretim rotası tanımlıyoruz
+  # 🔍 AJAN 3: Hızlı Debug, Log Analizi ve Hata Yakalama Uzmanı (PC-1)
+  - model_name: hata-ayiklama-asistani
+    litellm_params:
+      model: ollama/deepseek-coder:6.7b
+      api_base: http://192.168.50.1:11434
+
+  # 🎨 GÖRSEL MOTORU: OpenAI standartlarında ComfyUI API rotası (PC-1)
   - model_name: cluster-image-engine
     litellm_params:
       model: openai/comfyui

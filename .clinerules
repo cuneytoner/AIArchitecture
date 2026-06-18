@@ -41,3 +41,12 @@ Görevi anladıysan, yerel hafızadan ilk kuralları çekerek işe başla.
    - "Daha önce benzer bir dizin, yol veya yetki hatası (Örn: PYTHONPATH eksikliği) yaşadık mı?"
 3. Çözümü uyguladıktan sonra, tıpkı kıdemli bir yapay zeka danışmanı gibi, hatanın kök nedenini ve geleceğe yönelik kurumsal çözümünü analiz et.
 4. Bu analizi, bir sonraki projede veya serviste birebir hatırlamak üzere 'http://localhost:5000/memory/remember' adresindeki yerel hafıza ajanımıza (Qdrant) DETAYLI tecrübe notu olarak kaydet.
+
+
+## 🔗 PARALEL ÇOKLU AJAN ORKESTRASYON PROTOKOLÜ (MANDATORY)
+1. Karşılaştığın görev karmaşık bir mimari ve kodlama süreci içeriyorsa, tek bir modelle ezbere iş yapma. PC-2 LiteLLM üzerindeki paralel ajan havuzunu asenkron/paralel olarak tetikle.
+2. İş bölüşümünü tam olarak şu uzmanlık matrisine göre paralelleştir:
+   - **Mühendislik ve Ağ Planlaması:** Ağır algoritma, systemd servis kurguları veya Docker bağımlılıkları planlarken arka planda ilk olarak `planlama-ve-bellek` (Llama-70B) modeline danış ve mimari taslağı ondan al.
+   - **Saf Kod Üretimi:** Taslağı aldıktan sonra, temiz kod bloklarını yazma ve dosyaları oluşturma aşamasını doğrudan `akilli-kod-asistani` (Qwen-14B) modeline yaptır.
+   - **Hata ve Log Analizi:** Terminalde bir çökme (`Permission denied`, `libcudart` vb.) gördüğün an, hatanın hızlıca debug edilmesi için `hata-ayiklama-asistani` (DeepSeek-6.7B) modeline logları fırlatarak nokta atışı tavsiye iste.
+3. Görevleri yerine getirirken bu paralel iş akışını terminal komutları veya iç API çağrıları (LiteLLM endpointleri) üzerinden senkronize yönet.

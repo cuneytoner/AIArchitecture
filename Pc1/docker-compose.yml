@@ -47,14 +47,20 @@ services:
   # [DÜZELTME]: Edge tünel hatasını bitiren resmi direkt Portainer Ajanı
  # [KESİN ÇÖZÜM]: Pop!_OS 22.04 Docker API'si (1.42) ile %100 uyumlu çalışan kararlı LTS Ajan sürümü
   portainer_agent:
-    image: portainer/agent:2.16.2
-    container_name: ai_portainer_agent_pc1
-    ports:
-      - "9001:9001"
+    image: portainer/agent:latest
+    container_name: ai_portainer_edge_agent_pc1
+    environment:
+      - EDGE=1
+      - EDGE_SERVER_URL=http://192.168.50.2:9000
+      # [MÜHÜRLEME]: Portainer Admin panelinden (+ Add Environment -> Edge Agent) aldığınız o uzun anahtar metnini (Token) buraya yapıştırın
+      - EDGE_ID=e96532ae-d431-4ed4-b2e1-57a10376ba7e
+      - EDGE_KEY=aHR0cDovLzE5Mi4xNjguNTAuMjo5MDAwfDE5Mi4xNjguNTAuMjo4MDAwfEo1cS9OazYzT1FYeW55RWE5ZDZBN0JiZUlBZ051MExYWTBRZ0loejVORjQ9fDU
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - ./portainer_edge_data:/data
     restart: always
+
     
   redis:
     image: redis:7-alpine
