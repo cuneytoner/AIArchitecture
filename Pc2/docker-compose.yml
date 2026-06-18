@@ -56,12 +56,16 @@ services:
     ports:
       - "3000:8080"
     environment:
-      # Tüm modelleri ve istekleri bizim akıllı LiteLLM yönlendiricimiz üzerinden çekecek
       - OPENAI_API_BASE_URL=http://litellm:8000/v1
       - OPENAI_API_KEY=local-cluster-key
       - WEBUI_SECRET_KEY=super_secure_offline_secret
       - ENABLE_OLLAMA_API=False
       - ENABLE_OPENAI_API=True
+      # [KESİN BAĞLANTI]: Open-WebUI doğrudan bizim LiteLLM üzerindeki görsel rotamıza kilitleniyor
+      - ENABLE_IMAGE_GENERATION=True
+      - IMAGE_GENERATION_ENGINE=openai
+      - IMAGE_GENERATION_MODEL=cluster-image-engine
+      - OPENAI_IMAGE_API_BASE_URL=http://litellm:8000/v1
     volumes:
       - ./openwebui_data:/app/backend/data
     depends_on:

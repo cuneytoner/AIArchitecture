@@ -8,11 +8,18 @@ model_list:
 
   - model_name: planlama-ve-bellek
     litellm_params:
-      model: ollama/llama3.3:70b-instruct-q2_K
+      model: ollama/llama3.3:70b
       api_base: http://localhost:11434
-      tpm: 100000
-      rpm: 1000
 
-litellm_settings:
-  drop_invalid_params: true
-  set_verbose: false
+  # [KRİTİK EKLEME]: LiteLLM'e OpenAI standartlarında bir görsel üretim rotası tanımlıyoruz
+  - model_name: cluster-image-engine
+    litellm_params:
+      model: openai/comfyui
+      api_base: http://192.168.50.1:8188
+
+router_settings:
+  routing_strategy: simple-shuffle
+  enable_jwt_auth: false
+
+general_settings:
+  master_key: local-cluster-key

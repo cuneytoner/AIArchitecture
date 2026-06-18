@@ -13,10 +13,12 @@ RUN REPO_BASE="https://github.com" && \
     git clone "${REPO_BASE}${REPO_PATH}" .
 
 # [KRİTİK ADIM]: İçerideki PyTorch'u zorla Blackwell (sm_120) destekleyen CUDA Nightly sürümüne yükseltiyoruz
-RUN pip install --pre --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://pytorch.org
+RUN pip install --pre --upgrade --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cu130
 
 # ComfyUI'ın diğer tüm Python bağımlılıklarını kuruyoruz
 RUN pip install --no-cache-dir -r requirements.txt
+
+RUN chown -R 1000:1000 /workspace
 
 # Dış dünyaya ComfyUI portunu aç
 EXPOSE 8188

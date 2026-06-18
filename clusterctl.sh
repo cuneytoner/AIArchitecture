@@ -33,6 +33,7 @@ deploy() {
 
     # 2. Sadece Pc2 klasörünün içeriğini karşıya gönderiyoruz (Büyük ZIP'ler ve .git filtrelendi)
     # NOT: Yereldeki ./Pc2/ sonundaki eğik çizgi (/) içeriği tam aktarmak için kritiktir!
+    # Uzaktaki canlı veritabanı klasörlerini korumak için exclude listesine mühürlüyoruz
     rsync -avz --delete \
         --exclude '.git/' \
         --exclude 'node_modules/' \
@@ -41,7 +42,9 @@ deploy() {
         --exclude '*.log' \
         --exclude '*.zip' \
         --exclude '*.tar.gz' \
+        --exclude '*_data/' \
         ./Pc2/ cuneyt@$NODE_MEMORY_RAM_IP:$PROJECT_ROOT_PATH/Pc2/
+
 
     echo "Activating Docker containers on PC-2..."
     # 3. Uzak makinede doğrudan hedef klasöre girip modern docker compose komutunu tetikliyoruz
