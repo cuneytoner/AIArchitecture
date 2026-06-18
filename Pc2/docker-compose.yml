@@ -4,6 +4,7 @@ services:
     container_name: ai_memory_portainer
     ports:
       - "9000:9000"
+      - "8000:8000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./portainer_data:/data
@@ -22,7 +23,7 @@ services:
     image: ghcr.io/berriai/litellm:main-latest
     container_name: ai_router_litellm
     ports:
-      - "8000:8000"
+      - "8001:8000"
     volumes:
       - ./litellm-config.yaml:/app/config.yaml
     restart: always
