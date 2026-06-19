@@ -76,3 +76,25 @@ services:
     ports:
       - "5555:5555"
     restart: always
+
+  # 📊 PROMETHEUS: PC-1 ve PC-2 donanım verilerini toplayan zaman serisi veritabanı
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ai_monitor_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
+
+  # 🎨 GRAFANA: RAM, VRAM ve Task durumlarını şık widget'larla gösteren merkezî panel
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ai_monitor_grafana
+    ports:
+      - "3002:3000" # Open-WebUI 3000'de olduğu için Grafana'yı dışarıya 3002'den açıyoruz
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=local-cluster-grafana-pass
+    restart: always

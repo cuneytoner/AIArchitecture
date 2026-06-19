@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 5s # Her 5 saniyede bir RAM/VRAM verilerini tazele
+
+scrape_configs:
+  - job_name: 'ai_cluster_nodes'
+    static_configs:
+      - targets: ['192.168.50.1:9100', '192.168.50.2:9100'] # Bilgisayarların kendi RAM/CPU verileri
+
+  - job_name: 'celery_tasks_flower'
+    static_configs:
+      - targets: ['192.168.50.2:5555'] # Flower üzerinden kaç task aktif/pasif verisi
