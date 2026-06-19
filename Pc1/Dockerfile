@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /workspace
 
 # [GÜVENLİ BAĞLANTI]: Kırpılmayı önlemek için adresi parçalayıp birleştiriyoruz
-RUN REPO_BASE="https://github.com" && \
+RUN REPO_BASE="https://github.com" && \+-
     REPO_PATH="/comfyanonymous/ComfyUI.git" && \
     git clone "${REPO_BASE}${REPO_PATH}" .
 
@@ -33,5 +33,5 @@ RUN chown -R 1000:1000 /workspace
 # Dış dünyaya ComfyUI portunu aç
 EXPOSE 8188
 
-# Konteyner başladığında doğrudan ComfyUI sunucusunu tetikle
-CMD ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--highvram", "--fp16-vae"]
+# [KESİN VRAM OPTİMİZASYONU]: Büyük Qwen-2.5-VL modelleri için VRAM offloading ve FP8 hafifletme bayrakları eklendi
+CMD ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--lowvram", "--fp8_e4m3fn-textenc", "--fp8_e4m3fn-unet", "--fp16-vae"]
