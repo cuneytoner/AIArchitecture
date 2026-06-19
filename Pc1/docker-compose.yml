@@ -6,13 +6,15 @@ services:
     container_name: ai_image_comfyui
     ports:
       - "8188:8188"
-    # [DÜZELTME]: Dockerfile önbelleğini baypas ederek düşük VRAM ve FP8 kuantizasyon komutlarını çekirdekten dayatıyoruz
-    command: ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--lowvram", "--fp8_e4m3fn-textenc", "--fp8_e4m3fn-unet", "--fp16-vae"]
+    command: ["python3", "main.py", "--listen", "0.0.0.0", "--port", "8188", "--lowvram", "--fp8_e4m3fn-text-enc", "--fp8_e4m3fn-unet", "--fp16-vae"]
     environment:
       - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128,expandable_segments:True
       - CUDA_LAUNCH_BLOCKING=1
       - TRITON_CACHE_DIR=/workspace/.triton
       - HOME=/workspace
+      # [VRAM GROW BYPASS]: Sorun çıkartan comfy_aimdo eklentisini tamamen devre dışı bırakıp saf PyTorch lowvram yönetimine geçiyoruz
+      - COMFY_AIMDO_DISABLE=1
+      - AIMDO_DISABLE=1
     volumes:
       - ./comfyui_data/models:/workspace/models
       - ./comfyui_data/input:/workspace/input
