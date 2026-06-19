@@ -50,3 +50,21 @@ Görevi anladıysan, yerel hafızadan ilk kuralları çekerek işe başla.
    - **Saf Kod Üretimi:** Taslağı aldıktan sonra, temiz kod bloklarını yazma ve dosyaları oluşturma aşamasını doğrudan `akilli-kod-asistani` (Qwen-14B) modeline yaptır.
    - **Hata ve Log Analizi:** Terminalde bir çökme (`Permission denied`, `libcudart` vb.) gördüğün an, hatanın hızlıca debug edilmesi için `hata-ayiklama-asistani` (DeepSeek-6.7B) modeline logları fırlatarak nokta atışı tavsiye iste.
 3. Görevleri yerine getirirken bu paralel iş akışını terminal komutları veya iç API çağrıları (LiteLLM endpointleri) üzerinden senkronize yönet.
+
+
+## ⚙️ 6. BLACKWELL (RTX 5060Ti) VE CUDA 13 ÇEKİRDEK KURALLARI
+1. PC-1 üzerindeki ComfyUI Docker imajını güncellerken PyTorch için HER ZAMAN tam sub-path içeren şu resmi CUDA Nightly paket adresini düz metin olarak kullan: `https://pytorch.org`. Asla maskelenmiş veya kısa link kullanma.
+2. Ağır vision (Qwen-2.5-VL) iş akışlarında VRAM kilitlenmesini engellemek için, `./Pc1/docker-compose.yml` içerisindeki `command:` alanında `--lowvram`, `--fp8_e4m3fn-textenc` ve `--fp8_e4m3fn-unet` bayraklarının çakılı kalmasını zorunlu kıl. Asla varsayılan `--highvram` moduna geçme.
+3. Konteyner içi izin çakışmalarını ve PyTorch/Triton derleyici kilitlenmelerini (`/.triton` Permission denied) önlemek için ComfyUI konteynerini her zaman tam yetkili (root) modda çalıştır, `user: "1000:1000"` kısıtlamasını uygulama.
+
+## 🌐 7. MULTI-NODE NETWORK VE PORT MAP PROTOKOLÜ
+1. PC-2 üzerindeki yapay zeka yönlendiricisi olan LiteLLM'in dışarıya açık portu Portainer Edge Tüneli ile çakışmaması için kesinlikle `8001` portuna kilitlenmiştir. İç ağda `litellm:8000` kalabilir ancak dışarıdan istek atarken her zaman `http://192.168.50.2:8001` adresini hedefle.
+2. Ollama'nın yerel ağdaki (LAN) diğer nodelar ve Open-WebUI ile pürüzsüz el sıkışabilmesi için Host Systemd override katmanında `OLLAMA_HOST=0.0.0.0:11434` kuralını koru.
+
+## 🖥️ 8. PORTAINER EDGE TUNNEL ORKESTRASYON KURALLARI
+1. PC-1 ve PC-2 arasındaki Docker yönetim entegrasyonu standart bağımsız portlar yerine güvenli HTTPS Edge Tüneli (`portainer/agent:latest` + `EDGE=1`) üzerinden akmaktadır.
+2. Sürüm ve soket uyuşmazlıklarını (`client version is too old`) tamamen baypas eden bu tünelin ayakta kalması için `./Pc1/docker-compose.yml` içinde `EDGE_ID=e96532ae-d431-4ed4-b2e1-57a10376ba7e` ve en güncel Public IP kayıtlı `EDGE_KEY` token'ının noksansız durmasını sağla. PC-2 Portainer sunucusu ise WebSocket paketlerini `8000:8000` portundan karşılamak zorundadır.
+
+## 📂 9. BÜYÜK YEREL MODEL HAFIZA DİZİNLERİ
+1. Host (Linux) üzerinde native çalışan Ollama modellerinin yegane ve resmi evi `/usr/share/ollama/.ollama/models/` klasörüdür. Buradaki dosyaları taşırken her zaman `chown -R ollama:ollama` yetkilendirmesini zorunlu kıl.
+2. ComfyUI üzerindeki Qwen-2.5-VL Multimodal iş akışlarında indirilen dosyaları yerel host diski üzerinde tam olarak şu haritaya göre yerleştir: Ana difüzyon modelleri `checkpoints/`, model yamaları `controlnet/`, metin kodlayıcıları `text_encoders/` ve VAE dosyaları `vae/` altına mühürlenmelidir.
